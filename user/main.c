@@ -113,6 +113,7 @@ int main(void) {
   led(1, 1);
 
   zm_reset();
+  sensor_reset();
 
   while (1) {
     if (t0_tick) {
@@ -129,9 +130,13 @@ int main(void) {
     }
     if (Fifo_has_data(FIFO_U2_RX)) {
       Fifo_pop(FIFO_U2_RX, c);
+      sensor_rx(c);
     }
     if (sensor_tx_ready() && !u2_tx_busy) {
       u2_tx_start(sensor_tx());
+    }
+    if (sensor_value_ready()) {
+      sensor_value_pop();
     }
   }
 }
