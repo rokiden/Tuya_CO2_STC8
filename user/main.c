@@ -19,13 +19,19 @@ Sensor ◄─► UART1             │         │
                              │         │
                            ──┤ 6    11 ├── P3.2
                              │         │
-                      P5.5 ──┤ 7    10 ├── P3.1  Txd
+       Button to GND  P5.5 ──┤ 7    10 ├── P3.1  Txd
                              │         │             UART1 ◄─► ISP
                            ──┤ 8     9 ├── P3.0  Rxd
                              │         │
                              └─────────┘
 
 */
+
+#define BUTTON P55
+#define BUTTON_CONF()                                                                              \
+  GPIO_P5_SetMode(GPIO_Pin_5, GPIO_Mode_Input_HIP);                                                \
+  GPIO_SetPullUp(GPIO_Port_5, GPIO_Pin_5, HAL_State_ON)
+#define BUTTON_DEBOUNCE 250
 
 #define FIFO_U1_RX_size 32
 #define FIFO_U2_RX_size 16
@@ -80,6 +86,9 @@ int main(void) {
   // GPIO Led
   led_init();
 
+  // GPIO Button
+  BUTTON_CONF();
+
   // GPIO UART1
   GPIO_P1_SetMode(GPIO_Pin_6 | GPIO_Pin_7, GPIO_Mode_InOut_QBD);
 
@@ -112,6 +121,9 @@ int main(void) {
 
   led(1, 1);
 
+  uint8_t btn_debounce = 0;
+  __BIT btn_ack = 0;
+
   zm_reset();
   sensor_reset();
 
@@ -119,6 +131,13 @@ int main(void) {
     if (t0_tick) {
       t0_tick = 0;
       led_intr();
+      if (BUTTON == RESET) {
+        if (btn_debounce < BUTTON_DEBOUNCE)
+          btn_debounce++;
+      } else {
+        btn_debounce = 0;
+        btn_ack = 0;
+      }
     }
     if (Fifo_has_data(FIFO_U1_RX)) {
       Fifo_pop(FIFO_U1_RX, c);
