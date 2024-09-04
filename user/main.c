@@ -132,7 +132,7 @@ int main(void) {
   sensor_reset();
 
   while (1) {
-    if (t0_tick) {
+    if (t0_tick) { // Periodic tasks
       t0_tick = 0;
       led_intr();
       if (BUTTON == RESET) {
@@ -148,6 +148,7 @@ int main(void) {
         sensor_tx_start();
       }
     }
+    // UART RX TX
     if (Fifo_has_data(FIFO_U1_RX)) {
       Fifo_pop(FIFO_U1_RX, c);
       zm_rx(c);

@@ -27,4 +27,4 @@ LIB_FLAGS           := __CONF_MCU_MODEL=MCU_MODEL_STC8G1K17
 include ./rules.mk
 
 format:
-	clang-format -i --style=LLVM user/*
+	clang-format -i --style="{BasedOnStyle: llvm, ColumnLimit: 100}" user/*
