@@ -133,24 +133,26 @@ void sensor_rx(uint8_t c) {
     if (rx_data_size < RX_DATA_CAPACITY)
       rx_data[rx_data_size++] = c;
     else
-      led_err(3);
+      led_err(LED_ERR_SENSOR_RX_DATA);
     rx_len--;
     if (!rx_len)
       rx_state = RXS_CS0;
     break;
   case RXS_CS0:
     if (c != (rx_csum >> 8))
-      led_err(4);
+      led_err(LED_ERR_SENSOR_RX_CS0);
     else
       rx_state = RXS_CS1;
     break;
   case RXS_CS1:
     if (c != (rx_csum & 0xff))
-      led_err(5);
+      led_err(LED_ERR_SENSOR_RX_CS1);
     else
       sensor_rx_packet();
     sensor_rx_reset();
     break;
+  default:
+    led_err(LED_ERR_SENSOR_RX_STATE);
   }
   if (rx_state < RXS_CS0)
     rx_csum += c;

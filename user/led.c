@@ -30,8 +30,7 @@ void led_intr() {
     if (blink_cntr_intr == 0) // start of period
       LED_SETVAL(blink_led);
 
-    if (blink_cntr_intr ==
-        (blink_pause ? INTRS_PAUSE : INTRS_ON_OFF)) { // end of period
+    if (blink_cntr_intr == (blink_pause ? LED_INTRS_PAUSE : LED_INTRS_ON_OFF)) { // end of period
       blink_cntr_intr = 0;
 
       if (blink_pause) { // end of pause
@@ -77,7 +76,14 @@ void led(uint8_t pulses, __BIT inf) {
 }
 
 void led_err(uint8_t code) {
-  led(code, 1);
+  EXTI_Global_SetIntState(HAL_State_OFF);
   while (1) {
+    for (uint8_t i = 0; i < code; ++i) {
+      LED_SETVAL(1);
+      SYS_Delay(150);
+      LED_SETVAL(0);
+      SYS_Delay(150);
+    }
+    SYS_Delay(1000);
   };
 }

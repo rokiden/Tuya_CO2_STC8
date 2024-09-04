@@ -72,16 +72,18 @@ void zm_rx(uint8_t c) {
     if (rx_data_size < RX_DATA_CAPACITY)
       rx_data[rx_data_size++] = c;
     else
-      led_err(2);
+      led_err(LED_ERR_ZM_RX_DATA);
     rx_len--;
     if (!rx_len)
       rx_state = RXS_CS;
     break;
   case RXS_CS:
     if (c != rx_csum)
-      led_err(1);
+      led_err(LED_ERR_ZM_RX_CS);
     zm_rx_reset();
     break;
+  default:
+    led_err(LED_ERR_ZM_RX_STATE);
   }
   rx_csum += c;
 }
