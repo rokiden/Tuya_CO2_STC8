@@ -119,12 +119,14 @@ int main(void) {
   // Main
   uint8_t c;
 
-  led(1, 1);
 
   uint8_t btn_debounce = 0;
   __BIT btn_ack = 0;
 
   uint16_t sensor_period = 0;
+
+  uint8_t zm_status = ZM_STATUS_UNKNOWN;
+  uint8_t zm_status_old = zm_status + 1; // force change trigger
 
   zm_reset();
   sensor_reset();
@@ -149,7 +151,6 @@ int main(void) {
     if (Fifo_has_data(FIFO_U1_RX)) {
       Fifo_pop(FIFO_U1_RX, c);
       zm_rx(c);
-      // led(1, 0);
     }
     if (zm_tx_ready() && !u1_tx_busy) {
       u1_tx_start(zm_tx());
@@ -161,8 +162,24 @@ int main(void) {
     if (sensor_tx_ready() && !u2_tx_busy) {
       u2_tx_start(sensor_tx());
     }
-    if (sensor_value_ready()) {
-      sensor_value_pop();
+    // Others
+    if (zm_send_ready() && btn_debounce == BUTTON_DEBOUNCE && btn_ack == 0) {
+      btn_ack = 1;
+      zm_send_pair();
+    }
+    zm_status = zm_network_status();
+    if (zm_status == ZM_STATUS_PAIRED) {
+      if (zm_send_ready() && sensor_value_ready()) {
+        led(1, 0);
+        zm_send_value(sensor_value_pop());
+      }
+    }
+    if (zm_status != zm_status_old) {
+      if (zm_status == ZM_STATUS_PAIRED)
+        led(2, 0);
+      else
+        led(1, 1);
+      zm_status_old = zm_status;
     }
   }
 }
