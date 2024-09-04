@@ -124,6 +124,8 @@ int main(void) {
   uint8_t btn_debounce = 0;
   __BIT btn_ack = 0;
 
+  uint16_t sensor_period = 0;
+
   zm_reset();
   sensor_reset();
 
@@ -137,6 +139,11 @@ int main(void) {
       } else {
         btn_debounce = 0;
         btn_ack = 0;
+      }
+      sensor_period++;
+      if (sensor_period == SENSOR_PERIOD) {
+        sensor_period = 0;
+        sensor_tx_start();
       }
     }
     if (Fifo_has_data(FIFO_U1_RX)) {
