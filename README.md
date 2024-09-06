@@ -1,3 +1,6 @@
+# Tuya CO2 Sensor firmware located at 'user' directory
+Original library README below.
+
 # About
 
 FwLib_STC8 is a lite firmware library for STC8G/STC8H series MCU.
