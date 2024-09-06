@@ -27,6 +27,8 @@ Sensor ◄─► UART1             │         │
 
 */
 
+// #define TRIM_MODE
+
 #define BUTTON P55
 #define BUTTON_CONF()                                                                              \
   GPIO_P5_SetMode(GPIO_Pin_5, GPIO_Mode_Input_HIP);                                                \
@@ -119,6 +121,24 @@ int main(void) {
   // Main
   uint8_t c;
 
+#ifdef TRIM_MODE
+  uint16_t trim_period = 0;
+  while (1) {
+    if (t0_tick) {
+      t0_tick = 0;
+      led_intr();
+      if (++trim_period == 100) { // 10 sec
+        trim_period = 0;
+        led(1, 0);
+        u2_tx_start(IRTRIM);
+      }
+    }
+    if (Fifo_has_data(FIFO_U2_RX)) {
+      Fifo_pop(FIFO_U2_RX, c);
+      // IRTRIM = c;
+    }
+  }
+#endif
 
   uint8_t btn_debounce = 0;
   __BIT btn_ack = 0;
