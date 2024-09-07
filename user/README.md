@@ -2,6 +2,12 @@
 
 The main goal of this project is to fix the flood bug in the original firmware. The custom firmware reports the average CO2 concentration over a 10-minute period. The average value is calculated based on 128 measurements.
 
+### Quick Guide
+- Download lastest [Release](https://github.com/rokiden/Tuya_CO2_STC8/releases)
+- Connect USB-UART [Scheme](https://github.com/rokiden/Tuya_CO2_STC8/issues/1)
+- `pip install stcgal`
+- `stcgal -P stc8g -p /dev/ttyUSB0 app.hex` (replace ttyUSB0 for your case)
+
 ### Hardware: 
 - `ZT3L` Tuya Zigbee module
 - `STC8G1K17` STCmicro 8-bit 8051 microcontroller
@@ -20,12 +26,13 @@ STC8G can be flashed using any USB-UART converter. It should be configured for 3
 
 ### Software 
 
-- SDCC (installed from DNF in Fedora)
-- stcgal (installed from pip)
+- stcgal programmer (installed from pip)
+- SDCC compiler (installed from DNF in Fedora)
 - debug.py contains UART parsers used for development
 
 #### Commands:
 
+- Flash [pre-compiled](https://github.com/rokiden/Tuya_CO2_STC8/releases) hex `stcgal -P stc8g -p /dev/ttyUSB0 app.hex`
 - Build and flash `make && stcgal -P stc8g -p /dev/ttyUSB0 build/app.hex`
 - Clean build artifacts `make clean`
 - Format user/* sources `make format`
