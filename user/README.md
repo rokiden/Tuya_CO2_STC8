@@ -1,5 +1,7 @@
 # Custom firmware for STC microcontroller of Zigbee CO2 sensor 
 
+The main goal of this project is to fix the flood bug in the original firmware. The custom firmware reports the average CO2 concentration over a 10-minute period. The average value is calculated based on 128 measurements.
+
 ### Hardware: 
 - `ZT3L` Tuya Zigbee module
 - `STC8G1K17` STCmicro 8-bit 8051 microcontroller
@@ -37,6 +39,12 @@ STC8G can be flashed using any USB-UART converter. It should be configured for 3
   - *error*: regular N blinks with 1s pause, N = error code (defined in led.h)
 - data acquisition period and filtering parameters are defined in sensor.h (by default: measure every 4.6875s, average 128 measurements, as a result, average value sent every 10 minutes)
 - *error* is not a recoverable condition, power cycle to reset
+
+### Zigbee2MQTT
+
+Original device identified as `TS0601 _TZE204_ogkdpgy2` by Zigbee2MQTT and not supported. [Fix](https://github.com/Koenkk/zigbee2mqtt/issues/23205#issuecomment-2235297039)
+
+Modified firmware uses the same identification code.
 
 ### Links
 
