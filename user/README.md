@@ -62,3 +62,10 @@ Docs:
 - [ZT3L Module Datasheet](https://developer.tuya.com/en/docs/iot/zt3l-module-datasheet?id=Ka438n1j8nuvu)
 - [ZT3L UART Protocol](https://developer.tuya.com/en/docs/iot/tuya-zigbee-module-uart-communication-protocol?id=K9ear5khsqoty)
 - [MTP40-F](https://www.tinytronics.nl/index.php?route=product/product/get_file&file=4660/MTP40-F-CO2-sensor-module-single-channel.pdf)
+
+## Custom case
+
+Custom case with minimal size. FreeCAD project and stl for 3d printing located in 'user' dir.
+
+[Photo](https://github.com/rokiden/Tuya_CO2_STC8/issues/1#issuecomment-2395081453)
+
